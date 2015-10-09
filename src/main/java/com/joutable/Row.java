@@ -1,25 +1,23 @@
 package com.joutable;
 
+import java.nio.charset.Charset;
 import java.util.Comparator;
 
 /**
- * 代码表格的一行数据
+ * 代码表格的一行数据. 默认排序规则：从第一列开始排序，如果第一列相同就用第二列排序，一次类推
+ * 
  * @author atlas
  * @date 2012-12-11
  */
-public class Row implements Comparable<Row> {
+class Row implements Comparable<Row> {
 
 	private Object[] data;
 
-	private Comparator<Object> comparator = null;
+	private DefaultTable table;
 
-	Row(Object[] row) {
+	Row(Object[] row, DefaultTable table) {
 		this.data = row;
-	}
-
-	Row(Object[] row, Comparator comparator) {
-		this(row);
-		this.comparator = comparator;
+		this.table = table;
 	}
 
 	public int compareTo(Row oo) {
@@ -29,6 +27,7 @@ public class Row implements Comparable<Row> {
 			if (i >= dd.length)
 				return 1;
 			Object o = dd[i];
+			Comparator comparator = table.getCellComparator();
 			if (comparator != null) {
 				return comparator.compare(t, o);
 			}
@@ -39,7 +38,6 @@ public class Row implements Comparable<Row> {
 			} else {
 				t1 = String.valueOf(t);
 			}
-
 			if (o instanceof Comparable) {
 				o1 = (Comparable) o;
 			} else {
@@ -68,7 +66,7 @@ public class Row implements Comparable<Row> {
 	int getLength(int j) {
 		Object t = get(j);
 		if (t instanceof String) {
-			return ((String) t).length();
+			return ((String) t).getBytes(Charset.defaultCharset()).length;
 		}
 		return String.valueOf(t).length();
 	}
@@ -76,5 +74,4 @@ public class Row implements Comparable<Row> {
 	Object[] get() {
 		return data;
 	}
-
 }

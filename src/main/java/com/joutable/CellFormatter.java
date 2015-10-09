@@ -1,7 +1,7 @@
 package com.joutable;
 
 /**
- * 表格的每个单元格输出格式化参数
+ * 表格的每个单元格输出格式化类
  * @author atlas
  * @date 2012-12-12
  */

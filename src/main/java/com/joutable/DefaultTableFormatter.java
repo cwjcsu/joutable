@@ -11,13 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 默认的格式化工具
+ * 默认的表格格式化类
  * @author atlas
  * @date 2012-12-5
- */
-/**
- * @author atlas
- * @date 2015年10月8日
  */
 public class DefaultTableFormatter implements TableFormatter {
 	private static Logger log = Logger.getLogger(DefaultTableFormatter.class
@@ -34,8 +30,8 @@ public class DefaultTableFormatter implements TableFormatter {
 			return true;
 		}
 	};
-	private final int overallWidth;
-	private final int columnSeparatorWidth;
+	private int overallWidth;
+	private int columnSeparatorWidth;
 	private String lineSeparator = getProperty("line.separator");
 	private char titlePadLeftChar = '=';
 	private char titlePadRightChar = '=';
@@ -49,13 +45,15 @@ public class DefaultTableFormatter implements TableFormatter {
 	 */
 	private boolean sort = false;
 
+	private int minColumnWidth = 5;
+
 	public DefaultTableFormatter() {
 		this(120, 2);
 	}
 
 	public DefaultTableFormatter(int overallWidth, int columnSeparatorWidth) {
-		this.overallWidth = overallWidth;
 		this.columnSeparatorWidth = columnSeparatorWidth;
+		this.overallWidth = overallWidth;
 	}
 
 	public void addCellFormatter(CellFormatter... formatters) {
@@ -82,7 +80,7 @@ public class DefaultTableFormatter implements TableFormatter {
 		return buffer.toString();
 	}
 
-	private void convert(List<Row> rows) {
+	private void formatCell(List<Row> rows) {
 		for (Row row : rows) {
 			for (int i = 0; i < row.get().length; i++) {
 				Object cell = row.get(i);
@@ -143,15 +141,45 @@ public class DefaultTableFormatter implements TableFormatter {
 		}
 	}
 
+	/**
+	 * 设置每列分隔宽度
+	 * 
+	 * @param columnSeparatorWidth
+	 */
+	public void setColumnSeparatorWidth(int columnSeparatorWidth) {
+		if (columnSeparatorWidth >= 0) {
+			this.columnSeparatorWidth = columnSeparatorWidth;
+		}
+	}
+
+	/**
+	 * Set the minWidth of each column
+	 * 
+	 * @param minColumnWidth
+	 */
+	public void setMinColumnWidth(int minColumnWidth) {
+		if (minColumnWidth > 0) {
+			this.minColumnWidth = minColumnWidth;
+		}
+	}
+
+	public void setOverallWidth(int overallWidth) {
+		this.overallWidth = overallWidth;
+	}
+
 	public void setSort(boolean sort) {
 		this.sort = sort;
 	}
 
+	/**
+	 * 数据预处理
+	 * @param rows
+	 */
 	protected void preProcess(List<Row> rows) {
 		if (sort) {
 			sort(rows);
 		}
-		convert(rows);
+		formatCell(rows);
 	}
 
 	@Override
@@ -209,16 +237,26 @@ public class DefaultTableFormatter implements TableFormatter {
 
 		// 最终计算出来的每一列内容的最大宽度
 		int[] widthOfColumns = new int[cols];
-		// 最终计算出来的表格的总宽度
-		int totalLength = totalSeparatorWidth;
-		for (int i = 0; i < widthOfColumns.length; i++) {
-			// if enough,那么不用换行，每列该多宽就多宽，否则取与平均值相比最少的一个值
-			widthOfColumns[i] = enough ? longestOfColumns[i] : Math.min(
-					cellLen, longestOfColumns[i]);
-			// 保证标题只有一行
-			widthOfColumns[i] = Math.max(widthOfColumns[i], headersWidth[i]);
-			totalLength += widthOfColumns[i];
+		int minColumnWidth = Math.max(
+				(title.length() + 2 - totalSeparatorWidth) / cols,//按照标题长度为总宽度计算出每列平均宽度
+				this.minColumnWidth);
+		if (enough) {// 不用换行
+			for (int i = 0; i < widthOfColumns.length; i++) {
+				widthOfColumns[i] = Math.max(minColumnWidth,
+						Math.max(longestOfColumns[i], headersWidth[i]));
+			}
+		} else {//需要换行时，每列宽度取平均宽度。
+			//TODO 使用一个更智能的算法：从最宽的一列开始设置换行，当足够容纳之后，取消换行，这样可以保证：1）有换行的列数最少；2）换行的单元格尽可能占用少的行数（目前的算法，单元格可能占用超过2行）
+			for (int i = 0; i < widthOfColumns.length; i++) {
+				widthOfColumns[i] = Math.min(cellLen, longestOfColumns[i]);
+				// 保证标题只有一行
+				widthOfColumns[i] = Math.max(minColumnWidth,
+						Math.max(widthOfColumns[i], headersWidth[i]));
+			}
 		}
+		// 最终计算出来的表格的总宽度
+		int totalLength = sum(widthOfColumns) + totalSeparatorWidth;
+
 		// 组装
 		// 组装标题
 		int padHeader = (totalLength - title.length() + 1) / 2 - 2;// 不让标题与pad字符连接在一起，左右各空一格
@@ -263,7 +301,7 @@ public class DefaultTableFormatter implements TableFormatter {
 					if (pad >= 0) {
 						buffer.append(td);
 						buffer.append(repeat(' ', pad));
-					} else if (pad < 0) {//当前列需要换行
+					} else if (pad < 0) {// 当前列需要换行
 						repeart = true;
 						buffer.append(td.subSequence(0, w));
 						nextRow[i] = td.substring(w);

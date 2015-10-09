@@ -1,11 +1,10 @@
 package com.joutable;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import org.junit.Test;
-
-import com.joutable.DefaultTable;
-import com.joutable.DefaultTableFormatter;
 
 /**
  * 
@@ -14,9 +13,21 @@ import com.joutable.DefaultTableFormatter;
  */
 public class DefaultTableFormatterDemo {
 	@Test
+	public void testBasic0() {
+		DefaultTable dt = new DefaultTable();
+		dt.setTitle("Aacademic Record Table");
+		dt.setHeaders(new String[] { "Id", "Name", "Grade", "Remark" });
+		dt.addRow(new Object[] { 1001, "Jack Bower", "A", "Good at fighting" });
+		dt.addRow(new Object[] { 1002, "Vincent Willem  Van Gogh", "A+","Good at painting" });
+		dt.addRow(new Object[] { 1003, "Jone Doe", "B", "Noop" });
+		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
+		System.out.println(dtf.format(dt));
+	}
+
+	@Test
 	public void testBasic() {
 		DefaultTable dt = new DefaultTable();
-		dt.setTitle("Resource  Status");
+		dt.setTitle("A common table");
 		dt.setHeaders(new String[] { "Id", "Name", "Node", "Status" });
 		dt.addRow(getRows(0));
 		dt.addRow(getRows(1));
@@ -26,20 +37,7 @@ public class DefaultTableFormatterDemo {
 	}
 
 	@Test
-	public void testLongCell() {
-		DefaultTable dt = new DefaultTable();
-		dt.setTitle("Resource  Status");
-		dt.setHeaders(new String[] { "Id", "Name", "Node", "Status" });
-		dt.addRow(getRows(0));
-		dt.addRow(getRowsRandom(1));
-		dt.addRow(getRowsRandom(2));
-		dt.addRow(getRowsRandom(2));
-		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
-		System.out.println(dtf.format(dt));
-	}
-
-	@Test
-	public void testLongTitl() {
+	public void testLongTitle() {
 		DefaultTable dt = new DefaultTable();
 		dt.setTitle("Longongongongongongongongongongongongongongongongongongongongongongongongongongongongongongong title");
 		dt.setHeaders(new String[] { "Id", "Name", "Node", "Status" });
@@ -54,7 +52,7 @@ public class DefaultTableFormatterDemo {
 	public void testLongHeaders() {
 		DefaultTable dt = new DefaultTable();
 		dt.setTitle("A title");
-		dt.setHeaders(new String[] { "LLLLLLLLLLLLLLLLLLLLLLLLLLLlongId",
+		dt.setHeaders(new String[] { "LLLLLLLLLLLLLLLLLLLLLLLLLLLlongHeader",
 				"Name", "Node", "Status" });
 		dt.addRow(getRows(0));
 		dt.addRow(getRows(1));
@@ -66,59 +64,50 @@ public class DefaultTableFormatterDemo {
 	@Test
 	public void testShortWholeWidth() {
 		DefaultTable dt = new DefaultTable();
-		dt.setTitle("Resource  Status");
+		dt.setTitle("Short wrapped column");
 		dt.setHeaders(new String[] { "Id", "Name", "Node", "Status" });
-		// dt.addRow(getRows(0));
-		// dt.addRow(getRowsRandom(1));
-		// dt.addRow(getRowsRandom(3));
-		// dt.addRow(getRowsRandom(4));
+		dt.addRow(getRows(0));
+		dt.addRow(getRowsRandom(1));
+		dt.addRow(getRowsRandom(3));
+		dt.addRow(getRowsRandom(4));
 		DefaultTableFormatter dtf = new DefaultTableFormatter(50, 2);
 		System.out.println(dtf.format(dt));
 	}
 
 	@Test
-	public void testSort1() {
+	public void testSort() {
 		DefaultTable dt = new DefaultTable();
-		dt.setTitle("A sorted title");
+		dt.setTitle("A sorted table");
 		dt.setHeaders(new String[] { "Id", "Name" });
-		dt.addRow(new Object[] { 3, "Node1" });
+		dt.addRow(new Object[] { 3, "Node3" });
 		dt.addRow(new Object[] { 1, "Node1" });
-		dt.addRow(new Object[] { 4, "Node1" });
-		dt.addRow(new Object[] { 2, "Node1" });
+		dt.addRow(new Object[] { 4, "Node4" });
+		dt.addRow(new Object[] { 2, "Node2Y" });
+		dt.addRow(new Object[] { 2, "Node2X" });
+		dt.addRow(new Object[] { 2, "Node2" });
 		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
+		dtf.setSort(true);
 		System.out.println(dtf.format(dt));
 	}
 
 	@Test
 	public void testSort2() {
 		DefaultTable dt = new DefaultTable();
-		dt.setTitle("A sorted title");
+		dt.setTitle("A sorted table2");
 		dt.setHeaders(new String[] { "Id", "Name" });
 		dt.addRow(new Object[] { 3, "Node4" });
 		dt.addRow(new Object[] { 1, "Node3" });
 		dt.addRow(new Object[] { 3, "Node2" });
 		dt.addRow(new Object[] { 1, "Node1" });
 		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
-		System.out.println(dtf.format(dt));
-	}
-
-	@Test
-	public void testSort3() {
-		DefaultTable dt = new DefaultTable();
-		dt.setTitle("A sorted title");
-		dt.setHeaders(new String[] { "Id", "Name" });
-		dt.addRow(new Object[] { 3, "Node1" });
-		dt.addRow(new Object[] { 1, "Node1" });
-		dt.addRow(new Object[] { 4, "Node1" });
-		dt.addRow(new Object[] { 2, "Node1" });
-		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
+		dtf.setSort(true);
 		System.out.println(dtf.format(dt));
 	}
 
 	@Test
 	public void testIndent() {
 		DefaultTable dt = new DefaultTable();
-		dt.setTitle("A sorted title");
+		dt.setTitle("A intent table");
 		dt.setHeaders(new String[] { "Id", "Name" });
 		dt.addRow(new Object[] { 3, "Node1" });
 		dt.addRow(new Object[] { 1, "Node1" });
@@ -134,25 +123,100 @@ public class DefaultTableFormatterDemo {
 		DefaultTable dt = new DefaultTable();
 		dt.setTitle("arrow padded title");
 		dt.setHeaders(new String[] { "Id", "Name", "State" });
-		dt.addRow(new Object[] { 1, "Node1", "Running" });
+		dt.addRow(new Object[] { 1, "LOOOOOOOOOOOOOOOOOOOOOOOOng",
+				"LOOOOOOOOOOOOOOOOOOOOOOOOng column" });
 		dt.addRow(new Object[] { 2, "Node2", "Running" });
 		dt.addRow(new Object[] { 3, "Node3", "Running" });
 		dt.addRow(new Object[] { 4, "Node4", "Running" });
 		DefaultTableFormatter dtf = new DefaultTableFormatter(240, 2);
-		dtf.setTitlePadLeftChar('>');
+		dtf.setTitlePadLeftChar('<');
 		dtf.setTitlePadRightChar('>');
 		System.out.println(dtf.format(dt));
 	}
 
-	public static String[] getRows(int row) {
-		return new String[] { "id" + row, "Node" + row, row + "sss", "Stopped" };
+	@Test
+	public void testLongCellWrapped() {
+		DefaultTable dt = new DefaultTable();
+		dt.setTitle("wrapped cell title");
+		dt.setHeaders(new String[] { "Id", "Name", "State" });
+		dt.addRow(new Object[] {
+				1,
+				"NOOOOOOOOOOOOOOOOOOOOOOoooooooooooooooooooooooooooooooooooooooooooooOOde1",
+				"Running" });
+		dt.addRow(new Object[] { 2, "Node2", "Running" });
+		dt.addRow(new Object[] { 3, "Node3", "Running" });
+		dt.addRow(new Object[] { 4, "Node4", "Running" });
+		DefaultTableFormatter dtf = new DefaultTableFormatter(80, 2);
+		System.out.println(dtf.format(dt));
 	}
 
-	static Random r = new Random();
+	@Test
+	public void testDateAsCell() {
+		DefaultTable dt = new DefaultTable();
+		dt.setTitle("A date cell table");
+		dt.setHeaders(new String[] { "Id", "Name", "Date" });
+		dt.addRow(new Object[] { 1, "Node1", randomDate() });
+		dt.addRow(new Object[] { 2, "Node2", randomDate() });
+		dt.addRow(new Object[] { 3, "Node3", randomDate() });
+		dt.addRow(new Object[] { 4, "Node4", "Today" });
+		DefaultTableFormatter dtf = new DefaultTableFormatter(80, 2);
+		dtf.addCellFormatter(new CellFormatter() {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			@Override
+			public String format(Object cell) {
+				return sdf.format((Date) cell);
+			}
+
+			@Override
+			public boolean accepts(Object cell) {
+				return cell instanceof Date;
+			}
+		});
+		System.out.println(dtf.format(dt));
+	}
+
+	@Test
+	public void testStarSeperatedHeader() {
+		DefaultTable dt = new DefaultTable();
+		dt.setTitle("A custom header seperator table");
+		dt.setHeaders(new String[] { "Id", "Name", "Node", "Status" });
+		dt.addRow(getRows(0));
+		dt.addRow(getRows(1));
+		dt.addRow(getRows(2));
+		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
+		dtf.setHeaderSplitChar('*');
+		System.out.println(dtf.format(dt));
+	}
+
+	@Test
+	public void testChinese() {
+		// TODO 添加中文支持
+		DefaultTable dt = new DefaultTable();
+		dt.setTitle("学生成绩表");
+		dt.setHeaders(new String[] { "学号", "姓名", "成绩", "备注" });
+		dt.addRow(new Object[] { 1001, "秦始皇", 80 });
+		dt.addRow(new Object[] { 1002, "秦始皇", 80 });
+		dt.addRow(new Object[] { 1003, "Jack Bouwer", 90, "" });
+		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
+		dtf.setHeaderSplitChar('*');
+		System.out.println(dtf.format(dt));
+	}
+
+	private static Random r = new Random();
+
+	public static Date randomDate() {
+		int n = 1000 * 60 * 60 * 24;// milliseconds in a day
+		return new Date(System.currentTimeMillis() + r.nextInt(n) - n / 2);
+	}
 
 	public static String[] getRowsRandom(int row) {
 		return new String[] { "id" + row, randomStr(10 * row) + row,
 				row + "sss" + r.nextLong(), "Stopped" };
+	}
+
+	public static String[] getRows(int row) {
+		return new String[] { "id" + row, "Node" + row, row + "sss", "Stopped" };
 	}
 
 	/**
@@ -168,8 +232,7 @@ public class DefaultTableFormatterDemo {
 		String result = "";
 		for (int i = 0; i < length; i++) {
 			// 生成下标的随机数
-			Random random = new Random();
-			int index = random.nextInt(chars.length);
+			int index = r.nextInt(chars.length);
 			char tempChar = chars[index];
 			result += tempChar;
 		}
