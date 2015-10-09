@@ -1,4 +1,4 @@
-package com.joutable;
+package com.cwjcsu.joutable;
 
 /**
  * 表格的每个单元格输出格式化类

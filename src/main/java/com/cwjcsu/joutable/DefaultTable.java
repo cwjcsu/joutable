@@ -1,4 +1,4 @@
-package com.joutable;
+package com.cwjcsu.joutable;
 
 import java.util.ArrayList;
 import java.util.Collections;

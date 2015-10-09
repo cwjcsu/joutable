@@ -1,4 +1,4 @@
-package com.joutable;
+package com.cwjcsu.joutable;
 
 import static java.lang.System.getProperty;
 

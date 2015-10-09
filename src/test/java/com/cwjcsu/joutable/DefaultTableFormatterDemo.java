@@ -1,10 +1,14 @@
-package com.joutable;
+package com.cwjcsu.joutable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
 import org.junit.Test;
+
+import com.cwjcsu.joutable.CellFormatter;
+import com.cwjcsu.joutable.DefaultTable;
+import com.cwjcsu.joutable.DefaultTableFormatter;
 
 /**
  * 

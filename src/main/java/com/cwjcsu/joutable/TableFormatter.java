@@ -1,4 +1,4 @@
-package com.joutable;
+package com.cwjcsu.joutable;
 
 import java.io.IOException;
 
