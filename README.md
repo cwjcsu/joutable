@@ -30,6 +30,7 @@ You can customize the format:
 * Set `minColumnWidth` to make column width to fill your need
 
 ## Examples
+All the examples can be see at src/test/java/com/joutable/DefaultTableFormatterDemo.java
 
 ### A long title table
 
