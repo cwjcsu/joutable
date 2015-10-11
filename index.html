@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Joutable by cwjcsu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Joutable</h1>
+      <h2 class="project-tagline">An pretty formatted Table that can be printed in console in Java</h2>
+      <a href="https://github.com/cwjcsu/joutable" class="btn">View on GitHub</a>
+      <a href="https://github.com/cwjcsu/joutable/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/cwjcsu/joutable/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="an-simple-and-pretty-formatted-table-in-java" class="anchor" href="#an-simple-and-pretty-formatted-table-in-java" aria-hidden="true"><span class="octicon octicon-link"></span></a>An simple and pretty formatted Table in Java</h1>
+
+<p>You may want to print out some simple table (with title,headers) to the console with a readable format,then joutable is your best choise.</p>
+
+<h1>
+<a id="usages" class="anchor" href="#usages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usages</h1>
+
+<h2>
+<a id="how-to-use-joutable-" class="anchor" href="#how-to-use-joutable-" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Use joutable ?</h2>
+
+<pre><code>        DefaultTable dt = new DefaultTable();
+        dt.setTitle("Aacademic Record Table");
+        dt.setHeaders(new String[] { "Id", "Name", "Grade", "Remark" });
+        dt.addRow(new Object[] { 1001, "Jack Bower", "A", "Good at fighting" });
+        dt.addRow(new Object[] { 1002, "Vincent Willem  Van Gogh", "A+","Good at painting" });
+        dt.addRow(new Object[] { 1003, "Jone Doe", "B", "Noop" });
+        DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
+        System.out.println(dtf.format(dt));
+</code></pre>
+
+<p>this will print a pretty formatted table :</p>
+
+<pre><code>=============== Aacademic Record Table ===============
+Id     Name                      Grade  Remark          
+-----  ------------------------  -----  ----------------  
+1001   Jack Bower                A      Good at fighting
+1002   Vincent Willem  Van Gogh  A+     Good at painting
+1003   Jone Doe                  B      Noop   
+</code></pre>
+
+<p>You can customize the format: </p>
+
+<ul>
+<li>Padding char of the title;</li>
+<li>Separating char between headers and body</li>
+<li>Set <code>sort=true</code> to sort rows by the first column,by default</li>
+<li>Set <code>minColumnWidth</code> to make column width to fill your need</li>
+</ul>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>All the examples can be see at src/test/java/com/joutable/DefaultTableFormatterDemo.java</p>
+
+<h3>
+<a id="a-long-title-table" class="anchor" href="#a-long-title-table" aria-hidden="true"><span class="octicon octicon-link"></span></a>A long title table</h3>
+
+<pre><code> Longongongongongongongongongongongongongongongongongongongongongongongongongongongongongongong title 
+Id                        Name                      Node                      Status                  
+------------------------  ------------------------  ------------------------  ------------------------  
+id0                       Node0                     0sss                      Stopped                 
+id1                       Node1                     1sss                      Stopped                 
+id2                       Node2                     2sss                      Stopped    
+</code></pre>
+
+<h3>
+<a id="a-long-header-table" class="anchor" href="#a-long-header-table" aria-hidden="true"><span class="octicon octicon-link"></span></a>A long header table</h3>
+
+<pre><code>========================= A title =========================
+LLLLLLLLLLLLLLLLLLLLLLLLLLLlongHeader  Name   Node   Status 
+-------------------------------------  -----  -----  -------  
+id0                                    Node0  0sss   Stopped
+id1                                    Node1  1sss   Stopped
+id2                                    Node2  2sss   Stopped
+</code></pre>
+
+<h3>
+<a id="a-table-with-column-wrapped" class="anchor" href="#a-table-with-column-wrapped" aria-hidden="true"><span class="octicon octicon-link"></span></a>A table with column wrapped</h3>
+
+<pre><code>======== Short wrapped column ========
+Id     Name         Node         Status 
+-----  -----------  -----------  -------  
+id0    Node0        0sss         Stopped
+id1    d2ps3oody01  1sss6500491  Stopped
+                    34367211423         
+                    0                   
+id3    2h5uqrp3jrz  3sss9128827  Stopped
+       ns6bsynzz45  32113350427         
+       pu3pxysa3    3                   
+id4    0n9412d76fn  4sss7805302  Stopped
+       vd42a9sv3nt  45755729772         
+       3tivlli8eh4  3                   
+       3qb89a24  
+</code></pre>
+
+<h3>
+<a id="a-row-sorted-table" class="anchor" href="#a-row-sorted-table" aria-hidden="true"><span class="octicon octicon-link"></span></a>A row-sorted table</h3>
+
+<pre><code> A sorted table 
+Id       Name   
+-------  -------  
+1        Node1  
+2        Node2  
+2        Node2X 
+2        Node2Y 
+3        Node3  
+4        Node4  
+</code></pre>
+
+<h3>
+<a id="a-table-with-customed-indent" class="anchor" href="#a-table-with-customed-indent" aria-hidden="true"><span class="octicon octicon-link"></span></a>A table with customed indent</h3>
+
+<pre><code>  *   A intent table 
+  *  Id       Name   
+  *  -------  -------  
+  *  3        Node1  
+  *  1        Node1  
+  *  4        Node1  
+  *  2        Node1  
+</code></pre>
+
+<h3>
+<a id="a-table-with-arrow-padded-title" class="anchor" href="#a-table-with-arrow-padded-title" aria-hidden="true"><span class="octicon octicon-link"></span></a>A table with arrow padded title</h3>
+
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; arrow padded title &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+Id     Name                         State                             
+-----  ---------------------------  ----------------------------------  
+1      LOOOOOOOOOOOOOOOOOOOOOOOOng  LOOOOOOOOOOOOOOOOOOOOOOOOng column
+2      Node2                        Running                           
+3      Node3                        Running                           
+4      Node4                        Running       
+</code></pre>
+
+<h3>
+<a id="a-table-with-custom-cell-format" class="anchor" href="#a-table-with-custom-cell-format" aria-hidden="true"><span class="octicon octicon-link"></span></a>A table with custom cell format</h3>
+
+<pre><code>====== A date cell table ======
+Id     Name   Date               
+-----  -----  -------------------  
+1      Node1  2015-10-09 22:19:02
+2      Node2  2015-10-09 05:41:07
+3      Node3  2015-10-09 23:55:13
+4      Node4  Today   
+</code></pre>
+
+<h1>
+<a id="support-chinese" class="anchor" href="#support-chinese" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support Chinese</h1>
+
+<p>TODO 中文支持还有问题</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/cwjcsu/joutable">Joutable</a> is maintained by <a href="https://github.com/cwjcsu">cwjcsu</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
