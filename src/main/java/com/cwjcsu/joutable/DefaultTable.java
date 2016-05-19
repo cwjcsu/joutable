@@ -60,7 +60,6 @@ public class DefaultTable implements Table {
 		return r;
 	}
 
-	@Override
 	public String[] getHeaders() {
 		return headers;
 	}
@@ -69,7 +68,6 @@ public class DefaultTable implements Table {
 		return title;
 	}
 
-	@Override
 	public List<Row> getRows() {
 		return Collections.unmodifiableList(this.body);
 	}

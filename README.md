@@ -1,5 +1,14 @@
 # An simple and pretty formatted Table in Java
 You may want to print out some simple table (with title,headers) to the console with a readable format,then joutable is your best choise.
+#Install
+add this to your maven pom.xml:
+```
+        <dependency>
+            <groupId>com.github.cwjcsu</groupId>
+            <artifactId>joutable</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+```
 
 # Usages
 ## How to Use joutable ?
@@ -119,4 +128,44 @@ Id     Name   Date
 
 
 # Support Chinese 
-TODO 中文支持还有问题
+Joutable is default support Chinese.Joutable count any non-asccii character' width as 2.You can change this behavior by implement your own `com.cwjcsu.joutable.LengthCaculator` and set it to `DefaultTableFormatter`:
+```
+  ...
+    DefaultTableFormatter dtf = new DefaultTableFormatter(130, 3);
+    dtf.setIndent("");
+    dtf.setLengthCaculator(new MyLengthCaculator());
+    System.out.println(dtf.format(dt));
+    ...
+```
+
+Here is an example,
+code :
+```
+    DefaultTable dt = new DefaultTable();
+    dt.setTitle("一个中文表格");
+    dt.setHeaders(new String[] { "编号", "内容","备注" });
+    dt.addRow(new Object[] { 3, "秦始皇" ,""});
+    dt.addRow(new Object[] { 1, "刘邦" ,""});
+    dt.addRow(new Object[] { 4, "曹操" });
+    dt.addRow(new Object[] { 2, "刘彻金屋藏娇-典故正史无载，来源于志怪小说《汉武故事》其核心人物有两个。。。“娇”就是指陈氏，汉武帝刘彻的第一任皇后，后因骄横、无子与巫蛊被废黜" ,"汉武帝"});
+    dt.addRow(new Object[] { 5, "John Doe" ,"Who knows"});
+    DefaultTableFormatter dtf = new DefaultTableFormatter(130, 3);
+    System.out.println(dtf.format(dt));
+
+```
+
+looks like:
+```
+====================== 一个中文表格 ======================
+编号   内容                                        备注     
+----   -----------------------------------------   ---------   
+3      秦始皇                                               
+1      刘邦                                                 
+4      曹操                                                 
+2      刘彻金屋藏娇-典故正史无载，来源于志怪小说   汉武帝   
+       《汉武故事》其核心人物有两个。。。“娇”            
+       就是指陈氏，汉武帝刘彻的第一任皇后，后因            
+       骄横、无子与巫蛊被废黜                               
+5      John Doe                                    Who knows
+```
+

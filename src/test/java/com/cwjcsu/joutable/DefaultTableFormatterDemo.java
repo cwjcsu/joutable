@@ -91,6 +91,7 @@ public class DefaultTableFormatterDemo {
 		dt.addRow(new Object[] { 2, "Node2" });
 		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
 		dtf.setSort(true);
+		
 		System.out.println(dtf.format(dt));
 	}
 
@@ -167,12 +168,10 @@ public class DefaultTableFormatterDemo {
 		dtf.addCellFormatter(new CellFormatter() {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-			@Override
 			public String format(Object cell) {
 				return sdf.format((Date) cell);
 			}
 
-			@Override
 			public boolean accepts(Object cell) {
 				return cell instanceof Date;
 			}
@@ -194,7 +193,7 @@ public class DefaultTableFormatterDemo {
 	}
 
 	@Test
-	public void testChinese() {
+	public void testChinese0() {
 		// TODO 添加中文支持
 		DefaultTable dt = new DefaultTable();
 		dt.setTitle("学生成绩表");
@@ -207,6 +206,37 @@ public class DefaultTableFormatterDemo {
 		System.out.println(dtf.format(dt));
 	}
 
+	
+
+	@Test
+	public void testChinese1() {
+		DefaultTable dt = new DefaultTable();
+		dt.setTitle("一个中文表格");
+		dt.setHeaders(new String[] { "编号", "名称" });
+		dt.addRow(new Object[] { 3, "秦始皇" });
+		dt.addRow(new Object[] { 1, "刘邦" });
+		dt.addRow(new Object[] { 4, "曹操" });
+		dt.addRow(new Object[] { 2, "刘彻" });
+		dt.addRow(new Object[] { 5, "John Doe" });
+		DefaultTableFormatter dtf = new DefaultTableFormatter(100, 2);
+		dtf.setIndent("");
+		System.out.println(dtf.format(dt));
+	}
+
+	@Test
+	public void testChinese2() {
+		DefaultTable dt = new DefaultTable();
+		dt.setTitle("一个中文表格");
+		dt.setHeaders(new String[] { "编号", "内容","备注" });
+		dt.addRow(new Object[] { 3, "秦始皇" ,""});
+		dt.addRow(new Object[] { 1, "刘邦" ,""});
+		dt.addRow(new Object[] { 4, "曹操" });
+		dt.addRow(new Object[] { 2, "刘彻金屋藏娇-典故正史无载，来源于志怪小说《汉武故事》其核心人物有两个。。。“娇”就是指陈氏，汉武帝刘彻的第一任皇后，后因骄横、无子与巫蛊被废黜" ,"汉武帝"});
+		dt.addRow(new Object[] { 5, "John Doe" ,"Who knows"});
+		DefaultTableFormatter dtf = new DefaultTableFormatter(130, 3);
+		System.out.println(dtf.format(dt));
+	}
+	
 	private static Random r = new Random();
 
 	public static Date randomDate() {
